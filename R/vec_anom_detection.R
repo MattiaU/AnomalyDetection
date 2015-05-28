@@ -290,7 +290,7 @@ AnomalyDetectionVec = function(x, max_anoms=0.10, direction='pos',
   
   # Store expected values if set by user
   if(e_value) {
-    anoms <- data.frame(index=all_anoms[[1]], anoms=all_anoms[[2]], expected_value=subset(seasonal_plus_trend[[2]], seasonal_plus_trend[[1]] %in% all_anoms[[1]]))  
+    anoms <- data.frame(index=all_anoms[[1]], anoms=all_anoms[[2]], expected_value=subset(seasonal[[2]]+trend[[2]], seasonal[[1]] %in% all_anoms[[1]]))  
   } else {
     anoms <- data.frame(index=all_anoms[[1]], anoms=all_anoms[[2]])
   }
