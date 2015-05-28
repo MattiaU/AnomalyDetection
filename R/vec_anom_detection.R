@@ -284,7 +284,7 @@ AnomalyDetectionVec = function(x, max_anoms=0.10, direction='pos',
 	
 	# Show a plot of the STL decomposition 
 	
-	decompgraph <- ggplot2::ggplot(seasonal,ggplot2::aes_string(x="timestamp", y="count"))) + ggplot2::geom_point(data=seasonal) + ggplot2::geom_point(data=trend)
+	decompgraph <- ggplot2::ggplot(seasonal,ggplot2::aes_string(x="timestamp", y="count")) + ggplot2::geom_point(data=seasonal) + ggplot2::geom_point(data=trend)
 	
   }
   
