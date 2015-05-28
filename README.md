@@ -1,6 +1,9 @@
-# AnomalyDetection R package
+# Modifications to base package from Twitter 
 
-[![Build Status](https://travis-ci.org/twitter/AnomalyDetection.png)](https://travis-ci.org/twitter/AnomalyDetection)
+The package now removes trend components via STL and doesn't subtract off the median before the ESD step. 
+The Vec function call will return a second plot showing the STL decomposition called decomplot 
+
+# AnomalyDetection R package
 
 AnomalyDetection is an open-source R package to detect anomalies which is
 robust, from a statistical standpoint, in the presence of seasonality and an
@@ -34,7 +37,7 @@ Install the R package using the following commands on the R console:
 
 ```
 install.packages("devtools")
-devtools::install_github("twitter/AnomalyDetection")
+devtools::install_github("mmolaro/AnomalyDetection")
 library(AnomalyDetection)
 ```
 
@@ -67,7 +70,7 @@ res = AnomalyDetectionTs(raw_data, max_anoms=0.02, direction='both', plot=TRUE)
 res$plot
 ```
 
-![Fig 1](https://github.com/twitter/AnomalyDetection/blob/master/figs/Fig1.png)
+![Fig 1](https://github.com/mmolaro/AnomalyDetection/blob/master/figs/Fig1.png)
 
 From the plot, we observe that the input time series experiences both positive 
 and negative anomalies. Furthermore, many of the anomalies in the time series
@@ -93,7 +96,7 @@ res = AnomalyDetectionTs(raw_data, max_anoms=0.02, direction='both', only_last=â
 res$plot
 ```
 
-![Fig 2](https://github.com/twitter/AnomalyDetection/blob/master/figs/Fig2.png)
+![Fig 2](https://github.com/mmolaro/AnomalyDetection/blob/master/figs/Fig2.png)
 
 From the plot, we observe that only the anomalies that occurred during the last
 day have been annotated. Further, the prior six days are included to expose the
