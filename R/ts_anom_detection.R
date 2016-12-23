@@ -330,6 +330,8 @@ AnomalyDetectionTs <- function(x, max_anoms = 0.10, direction = 'pos',
   
   # Store expected values if set by user
   if(e_value) {
+    all_anoms[[1]] <- strftime(all_anoms[[1]], format="%Y-%m-%d %H:%M:%S")
+    seasonal[[1]] <- strftime(seasonal[[1]], format="%Y-%m-%d %H:%M:%S")
     anoms <- data.frame(timestamp=all_anoms[[1]], anoms=all_anoms[[2]], 
                         expected_value=subset(seasonal[[2]]+trend[[2]], seasonal[[1]] %in% all_anoms[[1]]),
                         stringsAsFactors=FALSE)
