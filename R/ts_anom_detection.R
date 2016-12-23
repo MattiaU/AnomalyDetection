@@ -212,7 +212,7 @@ AnomalyDetectionTs <- function(x, max_anoms = 0.10, direction = 'pos',
                                        one_tail=anomaly_direction$one_tail, upper_tail=anomaly_direction$upper_tail, verbose=verbose)
 
     # store decomposed components in local variable and overwrite s_h_esd_timestamps to contain only the anom timestamps
-    data_decomp <- s_h_esd_timestamps$stlS + s_h_esd_timestamps$stlT
+    data_decomp <- s_h_esd_timestamps$stl
     s_h_esd_timestamps <- s_h_esd_timestamps$anoms
 
     # -- Step 3: Use detected anomaly timestamps to extract the actual anomalies (timestamp and value) from the data
