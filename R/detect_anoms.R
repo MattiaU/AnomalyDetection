@@ -120,5 +120,5 @@ detect_anoms <- function(data, k = 0.49, alpha = 0.05, num_obs_per_period = NULL
       R_idx = NULL
     }
       
-    return(list(anoms = R_idx, stlS = data_decompS, stlT = data_decompT))
+    return(list(anoms = R_idx, stl = data_decomp))
 }
