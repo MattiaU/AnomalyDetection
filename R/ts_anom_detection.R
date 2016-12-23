@@ -196,7 +196,8 @@ AnomalyDetectionTs <- function(x, max_anoms = 0.10, direction = 'pos',
 
   # Create empty data frames to store all anoms and seasonal+trend component from decomposition
   all_anoms <- data.frame(timestamp=numeric(0), count=numeric(0))
-  seasonal_plus_trend <- data.frame(timestamp=numeric(0), count=numeric(0))
+  seasonal<- data.frame(timestamp=numeric(0), count=numeric(0))
+  trend <- data.frame(timestamp = numeric(0), count = numeric(0))
 
   # Detect anomalies on all data (either entire data in one-pass, or in 2 week blocks if longterm=TRUE)
   for(i in 1:length(all_data)) {
@@ -212,7 +213,8 @@ AnomalyDetectionTs <- function(x, max_anoms = 0.10, direction = 'pos',
                                        one_tail=anomaly_direction$one_tail, upper_tail=anomaly_direction$upper_tail, verbose=verbose)
 
     # store decomposed components in local variable and overwrite s_h_esd_timestamps to contain only the anom timestamps
-    data_decomp <- s_h_esd_timestamps$stl
+    data_decompS <- s_h_esd_timestamps$stlS
+  	data_decompT <- s_h_esd_timestamps$stlT
     s_h_esd_timestamps <- s_h_esd_timestamps$anoms
 
     # -- Step 3: Use detected anomaly timestamps to extract the actual anomalies (timestamp and value) from the data
@@ -239,12 +241,14 @@ AnomalyDetectionTs <- function(x, max_anoms = 0.10, direction = 'pos',
       anoms <- subset(anoms, anoms[[2]] >= thresh)
     }
     all_anoms <- rbind(all_anoms, anoms)
-    seasonal_plus_trend <- rbind(seasonal_plus_trend, data_decomp)
+    seasonal<- rbind(seasonal, data_decompS)
+  	trend<- rbind(trend, data_decompT)
   }
 
   # Cleanup potential duplicates
   all_anoms <- all_anoms[!duplicated(all_anoms[[1]]), ]
-  seasonal_plus_trend <- seasonal_plus_trend[!duplicated(seasonal_plus_trend[[1]]), ]
+  seasonal <- seasonal[!duplicated(seasonal[[1]]), ]
+  trend <- trend[!duplicated(trend[[1]]), ]
 
   # -- If only_last was set by the user, create subset of the data that represent the most recent day
   if(!is.null(only_last)){
@@ -322,12 +326,12 @@ AnomalyDetectionTs <- function(x, max_anoms = 0.10, direction = 'pos',
   }
 
   # Fix to make sure date-time is correct and that we retain hms at midnight
-  all_anoms[[1]] <- format(all_anoms[[1]], format="%Y-%m-%d %H:%M:%S")
+  #all_anoms[[1]] <- format(all_anoms[[1]], format="%Y-%m-%d %H:%M:%S")
   
   # Store expected values if set by user
   if(e_value) {
     anoms <- data.frame(timestamp=all_anoms[[1]], anoms=all_anoms[[2]], 
-                        expected_value=subset(seasonal_plus_trend[[2]], as.POSIXlt(seasonal_plus_trend[[1]], tz="CET") %in% as.POSIXlt(all_anoms[[1]], tz="CET")),
+                        expected_value=subset(seasonal[[2]]+trend[[2]], seasonal[[1]] %in% all_anoms[[1]]),
                         stringsAsFactors=FALSE)
   } else {
     anoms <- data.frame(timestamp=all_anoms[[1]], anoms=all_anoms[[2]], stringsAsFactors=FALSE)
