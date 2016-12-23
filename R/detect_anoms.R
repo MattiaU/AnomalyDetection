@@ -46,12 +46,10 @@ detect_anoms <- function(data, k = 0.49, alpha = 0.05, num_obs_per_period = NULL
     data <-data.frame(timestamp = data[[1L]], count = (data_decomp$time.series[,"remainder"]))
 	
     # Store the smoothed seasonal component, plus the trend component for use in determining the "expected values" option
-    data_decompS <- data.frame(timestamp=data[[1L]], count=(as.numeric(trunc(data_decomp$time.series[,"seasonal"]))))
-	data_decompT <- data.frame(timestamp=data[[1L]], count=(as.numeric(trunc(data_decomp$time.series[,"trend"]))))
+    data_decomp <- data.frame(timestamp=data[[1L]], count=(as.numeric(trunc(data_decomp$time.series[,"trend"]+data_decomp$time.series[,"seasonal"]))))
 
     if(posix_timestamp){
-        data_decompS <- format_timestamp(data_decompS)
-		data_decompT <- format_timestamp(data_decompT)
+        data_decomp <- format_timestamp(data_decomp)
     }
     # Maximum number of outliers that S-H-ESD can detect (e.g. 49% of data)
     max_outliers <- trunc(num_obs*k)
